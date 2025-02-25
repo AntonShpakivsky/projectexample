@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    container_name: project-example
+    restart: always
+    networks:
+      - backend
+    environment:
+      - DATABASE_URL=jdbc:postgresql://db:5432/db
+      - DATABASE_USER=user
+      - DATABASE_PASSWORD=password
+      - RABBITMQ_HOST=host
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USER=user
+      - RABBITMQ_PASSWORD=password
+
+networks:
+  backend:
+    driver: bridge
