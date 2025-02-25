@@ -1,0 +1,41 @@
+<configuration>
+
+    <!-- Конфигурация для консольного логирования -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{128} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Конфигурация для файлового логирования -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/app.log</file>
+        <encoder>
+            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{128} - %msg%n</pattern>
+        </encoder>
+
+        <!-- Политика ротации логов по времени и размеру -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- Шаблон имени архива -->
+            <fileNamePattern>logs/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- Максимальный размер архива перед созданием нового -->
+            <maxFileSize>100MB</maxFileSize>
+            <!-- Сохранение архивов логов на 7 дней -->
+            <maxHistory>7</maxHistory>
+            <!-- Общее ограничение на размер всех архивных файлов -->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- Уровень логирования для root -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+    <!-- Дополнительные настройки для сторонних библиотек -->
+    <logger name="org.eclipse.jetty" level="INFO"/>
+    <logger name="io.netty" level="INFO"/>
+    <logger name="org.ktorm.database" level="WARN" />
+
+</configuration>
