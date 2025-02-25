@@ -1,7 +1,6 @@
 package configuration
 
 import org.koin.dsl.module
-import service.MessageProcessor
 
 val dbModule =
     module {
@@ -10,10 +9,9 @@ val dbModule =
 
 val rabbitmqModule =
     module {
-        single { RabbitMQConfig(get()) }
+        single { RabbitMQConfig() }
     }
 
 val additionalModule =
     module {
-        single { MessageProcessor() }
     }
