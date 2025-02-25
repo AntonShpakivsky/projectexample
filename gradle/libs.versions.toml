@@ -1,0 +1,54 @@
+[versions]
+# kotlin
+kotlin-version = "2.1.0"
+# ktor
+ktor-version = "3.0.3"
+# ktlint
+ktlint = "11.6.1"
+# Логи
+logback-version = "1.4.14"
+# Работа с базой данных
+postgresql = "42.7.5"
+ktorm = "4.1.1"
+hikaricp = "6.2.1"
+# Работа с брокерами сообщений
+rabbitmq = "5.24.0"
+# Внедрение зависимостей
+koin = "4.0.2"
+# jackson
+jackson-module = "2.15.1"
+jackson-databind = "2.15.1"
+# Тесты
+koin-test = "4.0.2"
+kotest-runner-junit5-jvm = "5.9.1"
+kotest-assertions-core-jvm = "5.9.1"
+mockk = "1.13.16"
+
+[libraries]
+# ktor
+ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor-version" }
+ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor-version" }
+ktor-server-config-yaml = { module = "io.ktor:ktor-server-config-yaml", version.ref = "ktor-version" }
+# Логи
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback-version" }
+# Работа с базой данных
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+ktorm = { module = "org.ktorm:ktorm-core", version.ref = "ktorm" }
+hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
+# Работа с брокерами сообщений
+rabbitmq = { module = "com.rabbitmq:amqp-client", version.ref = "rabbitmq" }
+# Внедрение зависимостей
+koin = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
+# jackson
+jackson-module = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson-module" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson-databind" }
+# Тесты
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin-test" }
+kotest-runner-junit5-jvm = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest-runner-junit5-jvm" }
+kotest-assertions-core-jvm = { module = "io.kotest:kotest-assertions-core-jvm", version.ref = "kotest-assertions-core-jvm" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
+ktor = { id = "io.ktor.plugin", version.ref = "ktor-version" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
