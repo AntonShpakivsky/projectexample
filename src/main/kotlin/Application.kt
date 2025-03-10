@@ -1,7 +1,7 @@
-import configuration.DatabaseConfig
-import configuration.RabbitMQConfig
 import configuration.additionalModule
+import configuration.db.DatabaseConfig
 import configuration.dbModule
+import configuration.rabbitmq.RabbitMQConfig
 import configuration.rabbitmqModule
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
@@ -15,12 +15,10 @@ fun Application.module() {
 
 fun Application.configureDI() {
     install(Koin) {
-        modules(dbModule)
-        modules(rabbitmqModule)
-        modules(additionalModule)
+        modules(dbModule, rabbitmqModule, additionalModule)
     }
     val databaseConfig: DatabaseConfig by inject()
-    databaseConfig.info()
     val rabbitMQConfig: RabbitMQConfig by inject()
+    databaseConfig.info()
     rabbitMQConfig.info()
 }

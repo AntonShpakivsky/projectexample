@@ -1,4 +1,4 @@
-package configuration
+package configuration.db
 
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
@@ -49,10 +49,11 @@ class DatabaseConfig {
         }
 
     private fun handleConnectionError(e: Throwable) {
-        val message = when (e) {
-            is SQLException -> "<b99f3864> Ошибка подключения к базе данных: ${e.message}"
-            else -> "<5a825e72> Неизвестная ошибка подключения к БД: ${e.message}"
-        }
+        val message =
+            when (e) {
+                is SQLException -> "<b99f3864> Ошибка подключения к базе данных: ${e.message}"
+                else -> "<5a825e72> Неизвестная ошибка подключения к БД: ${e.message}"
+            }
         logger.error(message, e)
     }
 
