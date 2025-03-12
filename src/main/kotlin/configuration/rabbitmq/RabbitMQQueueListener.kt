@@ -4,15 +4,21 @@ import com.rabbitmq.client.AMQP
 import com.rabbitmq.client.Channel
 import com.rabbitmq.client.DeliverCallback
 import org.slf4j.LoggerFactory
+import processor.ExampleProcessor
 import utils.configRabbitMq
 
 class RabbitMQQueueListener(
     private val connectionProvider: RabbitMQConnectionProvider,
     queues: List<String>,
+    private val exampleProcessor: ExampleProcessor,
 ) {
     private val logger = LoggerFactory.getLogger(RabbitMQQueueListener::class.java)
 
-    val channel: Channel by lazy {
+    private val serviceHandlers = mapOf<String, (message: String) -> String>(
+        "ExampleRequest" to { message -> exampleProcessor.process(message) },
+    )
+
+    private val channel: Channel by lazy {
         connectionProvider.connection.createChannel()
     }
 
@@ -62,7 +68,3 @@ class RabbitMQQueueListener(
         logger.info("<e4cd2dc2> Отправлен ответ в очередь $responseQueue: $response")
     }
 }
-
-val serviceHandlers = mapOf<String, (message: String) -> String>(
-    "ExampleRequest" to { "" },
-)

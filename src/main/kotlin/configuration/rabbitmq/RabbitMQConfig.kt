@@ -3,10 +3,7 @@ package configuration.rabbitmq
 import configuration.ConnectionConfig
 import org.slf4j.LoggerFactory
 
-class RabbitMQConfig(
-    private val connectionProvider: RabbitMQConnectionProvider,
-    private val queueListener: RabbitMQQueueListener,
-) : ConnectionConfig {
+class RabbitMQConfig(private val connectionProvider: RabbitMQConnectionProvider) : ConnectionConfig {
     private val logger = LoggerFactory.getLogger(RabbitMQConfig::class.java)
 
     private val factory = connectionProvider.getFactory()
