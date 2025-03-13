@@ -24,7 +24,7 @@ class DatabaseConfig(
         maximumPoolSize = config.getInt("database.maximumPoolSize")
     }
 
-    private val database = connect()
+    val database = connect()
 
     private fun connect(): Database {
         return connectWithRetry()

@@ -4,6 +4,7 @@ import configuration.db.DatabaseConfig
 import configuration.rabbitmq.RabbitMQConfig
 import database.repository.ExampleRepository
 import org.koin.dsl.module
+import org.ktorm.database.Database
 import processor.ExampleProcessor
 import service.example.ExampleService
 import utils.configDB
@@ -17,6 +18,7 @@ val dbModule =
                 delayBetweenConnectionsMillis = configDB.getLong("delayBetweenConnectionsSec") * 1000,
             )
         }
+        single<Database> { get<DatabaseConfig>().database }
         single { ExampleRepository(get()) }
     }
 
