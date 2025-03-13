@@ -32,7 +32,7 @@ class RabbitMQConfig(
     private val connectionProvider =
         RabbitMQConnectionProvider(connectionFactory, reconnectAttempts, delayBetweenConnectionsMillis)
 
-    private val channelPool = RabbitMQChannelPool(connectionProvider.connection, maxChannels)
+    private val channelPool = RabbitMQChannelPool(connectionProvider.connection, maxChannels.coerceAtLeast(1))
 
     private val processorRegistry = ProcessorRegistry()
 
