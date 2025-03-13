@@ -7,7 +7,8 @@ import processor.ExampleProcessor
 class ProcessorRegistry : KoinComponent {
     private val exampleProcessor: ExampleProcessor by inject()
 
-    val processors = mapOf<String, (message: String) -> String>(
-        "ExampleRequest" to { message -> exampleProcessor.process(message) },
-    )
+    val processors =
+        mapOf<String, (message: String) -> String>(
+            "ExampleRequest" to { message -> exampleProcessor.process(message) }
+        )
 }

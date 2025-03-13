@@ -4,8 +4,6 @@ import com.rabbitmq.client.ConnectionFactory
 import configuration.ConnectionConfig
 import configuration.ProcessorRegistry
 import listener.RabbitMQQueueListener
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import org.slf4j.LoggerFactory
 import utils.configRabbitMq
 import java.util.concurrent.TimeUnit
@@ -13,7 +11,7 @@ import java.util.concurrent.TimeUnit
 class RabbitMQConfig(
     reconnectAttempts: Int = 5,
     delayBetweenConnectionsMillis: Long = 10_000,
-    maxChannels: Int = 10,
+    maxChannels: Int = 10
 ) : ConnectionConfig {
     private val logger = LoggerFactory.getLogger(RabbitMQConfig::class.java)
 
@@ -38,11 +36,12 @@ class RabbitMQConfig(
 
     private val processorRegistry = ProcessorRegistry()
 
-    private val queueListener = RabbitMQQueueListener(
-        channelPool,
-        configRabbitMq.getStringList("queue.requests"),
-        processorRegistry.processors,
-    )
+    private val queueListener =
+        RabbitMQQueueListener(
+            channelPool,
+            configRabbitMq.getStringList("queue.requests"),
+            processorRegistry.processors
+        )
 
     override fun info() {
         logger.info(

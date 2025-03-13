@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory
 class RabbitMQConnectionProvider(
     private val factory: ConnectionFactory,
     private val reconnectAttempts: Int,
-    private val delayBetweenConnectionsMillis: Long,
+    private val delayBetweenConnectionsMillis: Long
 ) {
     private val logger = LoggerFactory.getLogger(RabbitMQConnectionProvider::class.java)
 

@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory
 
 class RabbitMQChannelPool(
     private val connection: Connection,
-    private val maxChannels: Int,
+    private val maxChannels: Int
 ) {
     private val logger = LoggerFactory.getLogger(RabbitMQChannelPool::class.java)
 

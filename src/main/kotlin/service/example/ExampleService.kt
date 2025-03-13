@@ -12,20 +12,21 @@ import utils.ValidateDataException
 
 class ExampleService(private val repository: ExampleRepository) : SimpleService<ExampleRequest, ExampleResponse> {
     override fun processRequest(request: ExampleRequest): Response<ExampleResponse> {
-        val result = try {
-            validateRequest(request)
-            val responseDB = repository.findNameById(request.idExample!!)
-            handleSuccess(request, responseDB)
-        } catch (e: ValidateDataException) {
-            handleError(
-                e,
-                request,
-                ResultResponse.ERROR,
-                e.message ?: DEFAULT_ERROR_MESSAGE
-            )
-        } catch (e: RuntimeException) {
-            handleError(e, request, ResultResponse.CRITICAL_ERROR, DEFAULT_ERROR_MESSAGE)
-        }
+        val result =
+            try {
+                validateRequest(request)
+                val responseDB = repository.findNameById(request.idExample!!)
+                handleSuccess(request, responseDB)
+            } catch (e: ValidateDataException) {
+                handleError(
+                    e,
+                    request,
+                    ResultResponse.ERROR,
+                    e.message ?: DEFAULT_ERROR_MESSAGE
+                )
+            } catch (e: RuntimeException) {
+                handleError(e, request, ResultResponse.CRITICAL_ERROR, DEFAULT_ERROR_MESSAGE)
+            }
         return result
     }
 
@@ -37,14 +38,15 @@ class ExampleService(private val repository: ExampleRepository) : SimpleService<
 
     override fun handleSuccess(
         request: ExampleRequest,
-        response: Any?,
+        response: Any?
     ): Response<ExampleResponse> {
         val nameExample = response as String?
         return Response(
-            body = ExampleResponse(
-                idExample = request.idExample!!,
-                name = nameExample,
-            ),
+            body =
+                ExampleResponse(
+                    idExample = request.idExample!!,
+                    name = nameExample
+                ),
             head = HeadResponse(result = ResultResponse.OK)
         )
     }
@@ -53,16 +55,17 @@ class ExampleService(private val repository: ExampleRepository) : SimpleService<
         error: Throwable,
         request: ExampleRequest,
         resultResponse: ResultResponse,
-        userMessage: String,
+        userMessage: String
     ): Response<ExampleResponse> {
         return Response(
             body = ExampleResponse(idExample = request.idExample!!),
-            head = HeadResponse(
-                result = resultResponse,
-                userMessage = userMessage,
-                errorMessage = error.message,
-                operatorMessage = error.stackTraceToString(),
-            )
+            head =
+                HeadResponse(
+                    result = resultResponse,
+                    userMessage = userMessage,
+                    errorMessage = error.message,
+                    operatorMessage = error.stackTraceToString()
+                )
         )
     }
 }
