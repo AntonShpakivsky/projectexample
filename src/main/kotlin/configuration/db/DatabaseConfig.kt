@@ -3,43 +3,43 @@ package configuration.db
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
 import com.zaxxer.hikari.HikariDataSource
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
+import configuration.ConnectionConfig
 import org.ktorm.database.Database
 import org.slf4j.LoggerFactory
 import utils.ConnectionDatabaseException
 import java.sql.SQLException
 
-class DatabaseConfig {
+class DatabaseConfig(
+    private val reconnectAttempts: Int = 5,
+    private val delayBetweenConnectionsMillis: Long = 10_000,
+) : ConnectionConfig {
     private val logger = LoggerFactory.getLogger(DatabaseConfig::class.java)
     private val config: Config = ConfigFactory.load()
 
-    private val reconnectAttempt = config.getInt("database.reconnectAttempt")
-    private val delayBetweenConnectionsSec = config.getLong("database.delayBetweenConnectionsSec")
-
-    private val dataSource by lazy {
-        HikariDataSource().apply {
-            jdbcUrl = config.getString("database.url")
-            driverClassName = config.getString("database.driver")
-            username = config.getString("database.user")
-            password = config.getString("database.password")
-            maximumPoolSize = config.getInt("database.maximumPoolSize")
-        }
-    }
-    private val database: Database by lazy {
-        runBlocking { connectWithRetry() }
+    private val dataSource = HikariDataSource().apply {
+        jdbcUrl = config.getString("database.url")
+        driverClassName = config.getString("database.driver")
+        username = config.getString("database.user")
+        password = config.getString("database.password")
+        maximumPoolSize = config.getInt("database.maximumPoolSize")
     }
 
-    private suspend fun connectWithRetry(): Database {
+    private val database = connect()
+
+    private fun connect(): Database {
+        return connectWithRetry()
+    }
+
+    private fun connectWithRetry(): Database {
         logger.info("<d7383858> Начата установка соединения с Базой данных.")
-        repeat(reconnectAttempt) { attempt ->
-            logger.info("[${attempt + 1}/$reconnectAttempt] Попытка подключения к Базе данных.")
+        repeat(reconnectAttempts) { attempt ->
+            logger.info("[${attempt + 1}/$reconnectAttempts] Попытка подключения к Базе данных.")
             runCatching { runConnect() }
                 .onSuccess { return it }
                 .onFailure { handleConnectionError(it) }
-            delay(delayBetweenConnectionsSec * 1000)
+            Thread.sleep(delayBetweenConnectionsMillis)
         }
-        logger.error("<bc6a7dd7> Не удалось подключиться к Базе данных после $reconnectAttempt попыток.")
+        logger.error("<bc6a7dd7> Не удалось подключиться к Базе данных после $reconnectAttempts попыток.")
         throw ConnectionDatabaseException("Не получилось выполнить подключение к БД.")
     }
 
@@ -57,7 +57,7 @@ class DatabaseConfig {
         logger.error(message, e)
     }
 
-    fun info() {
+    override fun info() {
         logger.info(
             """
             Параметры подключения к базе данных:

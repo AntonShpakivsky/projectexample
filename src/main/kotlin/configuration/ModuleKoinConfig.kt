@@ -6,11 +6,17 @@ import database.repository.ExampleRepository
 import org.koin.dsl.module
 import processor.ExampleProcessor
 import service.example.ExampleService
+import utils.configDB
 import utils.configRabbitMq
 
 val dbModule =
     module {
-        single { DatabaseConfig() }
+        single {
+            DatabaseConfig(
+                reconnectAttempts = configDB.getInt("reconnectAttempt"),
+                delayBetweenConnectionsMillis = configDB.getLong("delayBetweenConnectionsSec") * 1000,
+            )
+        }
         single { ExampleRepository(get()) }
     }
 
