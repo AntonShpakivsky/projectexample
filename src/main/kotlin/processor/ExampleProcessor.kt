@@ -6,9 +6,7 @@ import dto.request.Request
 import dto.request.example.ExampleRequest
 import service.example.ExampleService
 
-class ExampleProcessor(
-    private val exampleService: ExampleService,
-) : Processor {
+class ExampleProcessor(private val exampleService: ExampleService) : Processor {
     private val objectMapper = jacksonObjectMapper()
 
     override fun process(request: String): String {

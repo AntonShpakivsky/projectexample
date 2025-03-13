@@ -15,7 +15,7 @@ fun Application.module() {
 
 fun Application.configureDI() {
     install(Koin) {
-        modules(dbModule, rabbitmqModule, additionalModule)
+        modules(dbModule, additionalModule, rabbitmqModule)
     }
     val databaseConfig: DatabaseConfig by inject()
     val rabbitMQConfig: RabbitMQConfig by inject()

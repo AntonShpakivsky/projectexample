@@ -10,9 +10,7 @@ import service.SimpleService
 import utils.DEFAULT_ERROR_MESSAGE
 import utils.ValidateDataException
 
-class ExampleService(
-    private val repository: ExampleRepository,
-) : SimpleService<ExampleRequest, ExampleResponse> {
+class ExampleService(private val repository: ExampleRepository) : SimpleService<ExampleRequest, ExampleResponse> {
     override fun processRequest(request: ExampleRequest): Response<ExampleResponse> {
         val result = try {
             validateRequest(request)
