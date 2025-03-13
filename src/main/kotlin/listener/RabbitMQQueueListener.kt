@@ -48,7 +48,7 @@ class RabbitMQQueueListener(
         logger.info("<3a6dc555> Получено сообщение из $queueName: $message. CorrelationId = $correlationId.")
         val replyTo = delivery.properties.replyTo
         if (replyTo == null) {
-            logger.warn("")
+            logger.warn("<8cdcbb91> Пришло сообщение без указания очереди для ответа. CorrelationId = $correlationId.")
             return@DeliverCallback
         }
         try {
