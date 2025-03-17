@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit
 class RabbitMQConfig(
     reconnectAttempts: Int = 5,
     delayBetweenConnectionsMillis: Long = 10_000,
-    maxChannels: Int = 10
 ) : ConnectionConfig {
     private val logger = LoggerFactory.getLogger(RabbitMQConfig::class.java)
 
@@ -23,7 +22,7 @@ class RabbitMQConfig(
             password = configRabbitMq.getString("password")
             virtualHost = configRabbitMq.getString("virtualHost")
             isAutomaticRecoveryEnabled = configRabbitMq.getBoolean("isAutomaticRecoveryEnabled")
-            networkRecoveryInterval = TimeUnit.SECONDS.toMillis(configRabbitMq.getLong("networkRecoveryInterval"))
+            networkRecoveryInterval = TimeUnit.SECONDS.toMillis(configRabbitMq.getLong("networkRecoveryIntervalSec"))
             requestedChannelMax = configRabbitMq.getInt("requestedChannelMax")
             connectionTimeout = configRabbitMq.getInt("connectionTimeout")
             handshakeTimeout = configRabbitMq.getInt("handshakeTimeout")
@@ -32,7 +31,10 @@ class RabbitMQConfig(
     private val connectionProvider =
         RabbitMQConnectionProvider(connectionFactory, reconnectAttempts, delayBetweenConnectionsMillis)
 
-    private val channelPool = RabbitMQChannelPool(connectionProvider.connection, maxChannels.coerceAtLeast(1))
+    private val channelPool = RabbitMQChannelPool(
+        connectionProvider.connection,
+        configRabbitMq.getInt("requestedChannelMax").coerceAtLeast(1),
+    )
 
     private val processorRegistry = ProcessorRegistry()
 
