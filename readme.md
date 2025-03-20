@@ -4,6 +4,17 @@
 Перед началом работы укажите в файле [gradle.properties](gradle.properties) значение параметра ```rootProject.name```, 
 соответствующее наименованию вашего проекта.
 
+Удалите классы-примеры:
+* [ExampleRepository](src/main/kotlin/database/repository/ExampleRepository.kt)
+* [ExampleRequest](src/main/kotlin/dto/request/example/ExampleRequest.kt)
+* [ExampleResponse](src/main/kotlin/dto/response/example/ExampleResponse.kt)
+* [ExampleProcessor](src/main/kotlin/processor/ExampleProcessor.kt)
+* [ExampleService](src/main/kotlin/service/example/ExampleService.kt)
+* [ExampleProcessorTest](src/test/kotlin/processor/ExampleProcessorTest.kt)
+* [ExampleServiceTest](src/test/kotlin/service/ExampleServiceTest.kt)
+
+Дополнительно: в файле [Tables](src/main/kotlin/database/Tables.kt) убрать ```ExampleTable```;
+
 ## Koin
 Все модули указываются в файле [ModuleKoinConfig](src/main/kotlin/configuration/ModuleKoinConfig.kt). 
 Они были разделены на три группы:
@@ -11,8 +22,7 @@
 - ```rabbitmqModule``` - модуль для внедрения зависимостей, связанных с брокером сообщений RabbitMq;
 - ```additionalModule``` - модуль для внедрения зависимостей, которые не подходят под вышеуказанные категории.
 
-В файле [application.conf](src/main/resources/application.conf) в блоке ``` ktor.application``` в параметре ```modules```  
-указан модуль ```ApplicationKt.configureDI```, в котором происходит внедрение зависимостей.
+В файле [application.conf](src/main/resources/application.conf) в блоке ``` ktor.application``` в параметре ```modules``` указан модуль ```ApplicationKt.configureDI```, в котором происходит внедрение зависимостей.
 
 ## База данных
 Для хранения данных используется база **PostgreSQL**, а для взаимодействия с ней – библиотека **Ktorm**.
@@ -68,5 +78,5 @@
 * Каждый процессор требуется добавить в классе [ProcessorRegistry](src/main/kotlin/configuration/ProcessorRegistry.kt) для того, что бы он был сопоставлен с очередью.
 * В классе [ProcessorRegistry](src/main/kotlin/configuration/ProcessorRegistry.kt) в словаре processors ключ должен быть наименованием очереди.
 * Опционально. В процессоре обработать ошибку в общем и вернуть ответ.
-* Опционально. Называть процессор по имени очереди с добавлением постсуффиком Processor. Называть сервис по типу запроса с добавлением постсуффиком Service. 
+* Опционально. Называть процессор по имени очереди с добавлением постфиксом Processor. Называть сервис по типу запроса с добавлением постфикса Service. 
 
