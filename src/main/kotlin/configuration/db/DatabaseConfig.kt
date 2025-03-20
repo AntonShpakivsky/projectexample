@@ -1,43 +1,38 @@
 package configuration.db
 
 import com.typesafe.config.Config
-import com.typesafe.config.ConfigFactory
 import com.zaxxer.hikari.HikariDataSource
 import configuration.ConnectionConfig
 import org.ktorm.database.Database
 import org.slf4j.LoggerFactory
 import utils.ConnectionDatabaseException
+import utils.configDB
 import java.sql.SQLException
 
-class DatabaseConfig(
-    private val reconnectAttempts: Int = 5,
-    private val delayBetweenConnectionsMillis: Long = 10_000,
-) : ConnectionConfig {
+class DatabaseConfig(private val config: Config = configDB) : ConnectionConfig {
     private val logger = LoggerFactory.getLogger(DatabaseConfig::class.java)
-    private val config: Config = ConfigFactory.load()
 
     private val dataSource = HikariDataSource().apply {
-        jdbcUrl = config.getString("database.url")
-        driverClassName = config.getString("database.driver")
-        username = config.getString("database.user")
-        password = config.getString("database.password")
-        maximumPoolSize = config.getInt("database.maximumPoolSize")
+        jdbcUrl = config.getString("url")
+        driverClassName = config.getString("driver")
+        username = config.getString("user")
+        password = config.getString("password")
+        maximumPoolSize = config.getInt("maximumPoolSize")
     }
 
-    val database = connect()
+    val database: Database = connect()
 
-    private fun connect(): Database {
-        return connectWithRetry()
-    }
+    private fun connect() = connectWithRetry()
 
     private fun connectWithRetry(): Database {
         logger.info("<d7383858> Начата установка соединения с Базой данных.")
+        val reconnectAttempts = config.getInt("reconnectAttempt").coerceAtLeast(1)
         repeat(reconnectAttempts) { attempt ->
             logger.info("[${attempt + 1}/$reconnectAttempts] Попытка подключения к Базе данных.")
             runCatching { runConnect() }
                 .onSuccess { return it }
                 .onFailure { handleConnectionError(it) }
-            Thread.sleep(delayBetweenConnectionsMillis)
+            Thread.sleep(config.getLong("delayBetweenConnectionsSec").coerceAtLeast(1) * 1000)
         }
         logger.error("<bc6a7dd7> Не удалось подключиться к Базе данных после $reconnectAttempts попыток.")
         throw ConnectionDatabaseException("Не получилось выполнить подключение к БД.")

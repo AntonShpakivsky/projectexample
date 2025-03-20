@@ -47,6 +47,10 @@ dependencies {
     testImplementation(libs.mockk)
 }
 
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+}
+
 ktlint {
     version = "1.2.1"
     debug = false // Включить debug-логи

@@ -13,10 +13,7 @@ import utils.configRabbitMq
 val dbModule =
     module {
         single {
-            DatabaseConfig(
-                reconnectAttempts = configDB.getInt("reconnectAttempt"),
-                delayBetweenConnectionsMillis = configDB.getLong("delayBetweenConnectionsSec") * 1000,
-            )
+            DatabaseConfig(config = configDB)
         }
         single<Database> { get<DatabaseConfig>().database }
         single { ExampleRepository(get()) }
