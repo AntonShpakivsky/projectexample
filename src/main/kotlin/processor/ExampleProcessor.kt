@@ -32,12 +32,13 @@ class ExampleProcessor(private val exampleService: ExampleService) : Processor {
             objectMapper.writeValueAsString(
                 Response(
                     body = null,
-                    head = HeadResponse(
-                        result = ResultResponse.CRITICAL_ERROR,
-                        userMessage = DEFAULT_ERROR_MESSAGE,
-                        errorMessage = e.message,
-                        operatorMessage = e.stackTraceToString(),
-                    )
+                    head =
+                        HeadResponse(
+                            result = ResultResponse.CRITICAL_ERROR,
+                            userMessage = DEFAULT_ERROR_MESSAGE,
+                            errorMessage = e.message,
+                            operatorMessage = e.stackTraceToString()
+                        )
                 )
             )
         }

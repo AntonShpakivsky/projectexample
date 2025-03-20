@@ -12,13 +12,14 @@ import java.sql.SQLException
 class DatabaseConfig(private val config: Config = configDB) : ConnectionConfig {
     private val logger = LoggerFactory.getLogger(DatabaseConfig::class.java)
 
-    private val dataSource = HikariDataSource().apply {
-        jdbcUrl = config.getString("url")
-        driverClassName = config.getString("driver")
-        username = config.getString("user")
-        password = config.getString("password")
-        maximumPoolSize = config.getInt("maximumPoolSize")
-    }
+    private val dataSource =
+        HikariDataSource().apply {
+            jdbcUrl = config.getString("url")
+            driverClassName = config.getString("driver")
+            username = config.getString("user")
+            password = config.getString("password")
+            maximumPoolSize = config.getInt("maximumPoolSize")
+        }
 
     val database: Database = connect()
 

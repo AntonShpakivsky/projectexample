@@ -32,7 +32,7 @@ val rabbitmqModule =
         single {
             RabbitMQConfig(
                 reconnectAttempts = configRabbitMq.getInt("reconnectAttempts"),
-                delayBetweenConnectionsMillis = configRabbitMq.getLong("delayBetweenConnectionsSec") * 1000,
+                delayBetweenConnectionsMillis = configRabbitMq.getLong("delayBetweenConnectionsSec") * 1000
             )
         }
     }

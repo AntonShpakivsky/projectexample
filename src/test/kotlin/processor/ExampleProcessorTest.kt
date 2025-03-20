@@ -23,17 +23,19 @@ class ExampleProcessorTest : FreeSpec({
     val exampleProcessor = ExampleProcessor(mockExampleService)
 
     "Processor Example: success" {
-        val requestJson = objectMapper.writeValueAsString(
-            Request(
-                head = HeadRequest("EXAMPLE"),
-                body = ExampleRequest(UUID.fromString("84354cd4-c905-46fb-910f-345a2d07e1da")),
-            ),
-        )
+        val requestJson =
+            objectMapper.writeValueAsString(
+                Request(
+                    head = HeadRequest("EXAMPLE"),
+                    body = ExampleRequest(UUID.fromString("84354cd4-c905-46fb-910f-345a2d07e1da"))
+                )
+            )
 
-        every { mockExampleService.processRequest(any()) } returns Response(
-            body = ExampleResponse(UUID.randomUUID(), "test1"),
-            head = HeadResponse(result = ResultResponse.OK)
-        )
+        every { mockExampleService.processRequest(any()) } returns
+            Response(
+                body = ExampleResponse(UUID.randomUUID(), "test1"),
+                head = HeadResponse(result = ResultResponse.OK)
+            )
 
         val resultJson = exampleProcessor.process(requestJson)
         val result: Response<ExampleResponse> = objectMapper.readValue(resultJson)
@@ -43,9 +45,10 @@ class ExampleProcessorTest : FreeSpec({
     }
 
     "Processor Example: unknown request type" {
-        val requestJson = objectMapper.writeValueAsString(
-            Request<Any>(head = HeadRequest("UNKNOWN")),
-        )
+        val requestJson =
+            objectMapper.writeValueAsString(
+                Request<Any>(head = HeadRequest("UNKNOWN"))
+            )
 
         val resultJson = exampleProcessor.process(requestJson)
         val result: Response<ExampleResponse> = objectMapper.readValue(resultJson)
@@ -56,12 +59,13 @@ class ExampleProcessorTest : FreeSpec({
     }
 
     "Processor Example: the service returned an error" {
-        val requestJson = objectMapper.writeValueAsString(
-            Request(
-                head = HeadRequest("EXAMPLE"),
-                body = ExampleRequest(UUID.fromString("84354cd4-c905-46fb-910f-345a2d07e1da")),
-            ),
-        )
+        val requestJson =
+            objectMapper.writeValueAsString(
+                Request(
+                    head = HeadRequest("EXAMPLE"),
+                    body = ExampleRequest(UUID.fromString("84354cd4-c905-46fb-910f-345a2d07e1da"))
+                )
+            )
 
         every { mockExampleService.processRequest(any()) } throws RuntimeException("Internal Error")
 

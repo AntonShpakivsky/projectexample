@@ -34,9 +34,10 @@ class ExampleServiceTest : FreeSpec({
     "Service Example: validate error" {
         val request = ExampleRequest(idExample = null)
 
-        val exception = shouldThrow<ValidateDataException> {
-            exampleService.validateRequest(request)
-        }
+        val exception =
+            shouldThrow<ValidateDataException> {
+                exampleService.validateRequest(request)
+            }
 
         exception.message shouldBe "Значение поля idExample пришло пустым"
     }

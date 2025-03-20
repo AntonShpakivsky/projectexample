@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 
 class RabbitMQConfig(
     reconnectAttempts: Int = 5,
-    delayBetweenConnectionsMillis: Long = 10_000,
+    delayBetweenConnectionsMillis: Long = 10_000
 ) : ConnectionConfig {
     private val logger = LoggerFactory.getLogger(RabbitMQConfig::class.java)
 
@@ -31,10 +31,11 @@ class RabbitMQConfig(
     private val connectionProvider =
         RabbitMQConnectionProvider(connectionFactory, reconnectAttempts, delayBetweenConnectionsMillis)
 
-    private val channelPool = RabbitMQChannelPool(
-        connectionProvider.connection,
-        configRabbitMq.getInt("requestedChannelMax").coerceAtLeast(1),
-    )
+    private val channelPool =
+        RabbitMQChannelPool(
+            connectionProvider.connection,
+            configRabbitMq.getInt("requestedChannelMax").coerceAtLeast(1)
+        )
 
     private val processorRegistry = ProcessorRegistry()
 
